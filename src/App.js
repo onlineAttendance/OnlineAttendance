@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import AppContainer from "./UI/AppContainer";
+import AuthContextProvider from "./context/auth-context";
+import PostContextProvider from "./context/post-context";
+import AttendanceContextProvider from "./context/attendance-context";
+import ProfileContextProvider from "./context/profile-context";
+import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthContextProvider>
+      <ProfileContextProvider>
+        <PostContextProvider>
+          <AttendanceContextProvider>
+            <AppContainer></AppContainer>
+          </AttendanceContextProvider>
+        </PostContextProvider>
+      </ProfileContextProvider>
+    </AuthContextProvider>
   );
 }
 
