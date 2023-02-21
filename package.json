@@ -3,6 +3,7 @@
   "proxy": "http://attendance-hsk4991149.koyeb.app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://onlineattendance.github.io/OnlineAttendance/",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
