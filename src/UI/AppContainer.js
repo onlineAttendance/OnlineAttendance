@@ -40,7 +40,7 @@ const AppContainer = ({ children }) => {
         handleModalOpen={handleModalOpen}
       ></Header>
       <Container maxWidth="md">
-        <Stack sx={{mt:8, mb:5}}>
+        <Stack sx={{mt:8, mb:8}}>
           <Box>{isAttendance ? <Attendance /> : <TodaysWord />}</Box>
         </Stack>
       </Container>

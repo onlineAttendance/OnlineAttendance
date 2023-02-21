@@ -7,6 +7,11 @@ import {
   Paper,
   TextField,
   Typography,
+  List,
+  ListItemAvatar,
+  Avatar,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import useHttp from "../hooks/useHttp";
 import { AuthContext } from "../context/auth-context";
@@ -15,8 +20,8 @@ import { ProfileContext } from "../context/profile-context";
 
 function CircularProgressWithLabel(props) {
   return (
-    <Box sx={{ position: "relative", display: "inline-flex" }}>
-      <CircularProgress variant="determinate" {...props} />
+    <Box sx={{ position: "relative", display: "inline-flex", width:1, justifyContent:"center", mt:2, mb:2}}>
+      <CircularProgress variant="determinate" {...props} size={80}/>
       <Box
         sx={{
           top: 0,
@@ -29,7 +34,7 @@ function CircularProgressWithLabel(props) {
           justifyContent: "center",
         }}
       >
-        <Typography variant="caption" component="div" color="text.secondary">
+        <Typography variant="caption" component="div" color="text.secondary" sx={{fontSize:20}}>
           {`${Math.round(props.value)}%`}
         </Typography>
       </Box>
@@ -102,10 +107,6 @@ const Attendance = () => {
     if (e.target.value.length > 4) {
       setError(true);
       setHelperText("출석코드는 4자리입니다.");
-    } else if (e.target.value.length === 4) {
-      setAttendanceCode(e.target.value);
-      console.log("출석코드 제출");
-      handleAttendanceCodeSubmit();
     } else {
       setError(false);
       setHelperText(null);
@@ -113,8 +114,8 @@ const Attendance = () => {
   };
   return (
     <Paper>
-      <Grid container sx={{boxSizing:"border-box"}}>
-        <Grid item xs={12}>
+      <Grid container>
+        <Grid item sx={{ flexGrow: 1 }}>
           <TextField
             label="출석코드"
             error={error}
@@ -122,47 +123,81 @@ const Attendance = () => {
             fullWidth
             onChange={handleAttendanceCode}
           />
-          <Button onClick={handleInitAttendanceList}>업데이트 확인</Button>
         </Grid>
+        <Grid item xs={3}>
+          <Button
+            sx={{ height: 1 }}
+            variant="contained"
+            onClick={handleAttendanceCodeSubmit}
+          >
+            출석하기
+          </Button>
+        </Grid>
+
         <Grid item xs={12}>
           <CircularProgressWithLabel value={value} />
         </Grid>
         <Grid item xs={12}>
-          <Paper sx={{ backgroundColor: "Blue", flexGrow: 1 }}>
-            <Grid container spacing={2}>
-              <Grid
-                item
-                xs={12}
-                sx={{ backgroundColor: "#FFF", textAlign: "center", m:1 ,boxSizing:"border-box" }}
-              >
-                <Typography variant="h6">{profileContext.userTeam}</Typography>
-              </Grid>
-              <Grid
-                item
-                xs={6}
-                sx={{ backgroundColor: "#FFF", textAlign: "center", m:1 ,boxSizing:"border-box"}}
-              >
-                <Typography variant="h6">미출석</Typography>
-                {attendanceContext.notAttendanceList.map((item) => (
-                  <Typography variant="body1" key={item.name}>
-                    {item.name}
-                  </Typography>
-                ))}
-              </Grid>
-              <Grid
-                item
-                xs={6}
-                sx={{ backgroundColor: "#FFF", textAlign: "center", m:1 ,boxSizing:"border-box"}}
-              >
-                <Typography variant="h6">출석자</Typography>
-                {attendanceContext.attendanceList.map((item) => (
-                  <Typography variant="body1" key={item.name}>
-                    {item.name}
-                  </Typography>
-                ))}
-              </Grid>
+          <Grid container rowSpacing={1} sx={{backgroundColor:"#1976D2", borderRadius:"5px"}}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1, p:1}}>
+                {profileContext.userTeam}
+              </Paper>
             </Grid>
-          </Paper>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1,p:1 }}>
+                미출석
+              </Paper>
+              <Paper sx={{ m: 1 }}>
+                <List>
+                  {attendanceContext.notAttendanceList.map((item) => (
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar alt={item.name} src={item.image} />
+                      </ListItemAvatar>
+                      <ListItemText>{item.name}</ListItemText>
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                textAlign: "center",
+                boxSizing: "border-box",
+              }}
+            >
+              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1,p:1 }}>
+                출석자
+              </Paper>
+              <Paper sx={{ m: 1 }}>
+                <List>
+                  {attendanceContext.attendanceList.map((item) => (
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar alt={item.name} src={item.image} />
+                      </ListItemAvatar>
+                      <ListItemText>{item.name}</ListItemText>
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Paper>
