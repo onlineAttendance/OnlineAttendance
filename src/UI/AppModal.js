@@ -33,7 +33,7 @@ const AppModal = (props) => {
         ) : authContext.isLogin ? (
           <MyInfo handleClose={props.handleClose}/>
         ) : (
-          <SignIn handleClose={props.handleClose}/>
+          <SignIn handleSignUp={props.handleSignUp} handleClose={props.handleClose}/>
         )}
       </Box>
     </Modal>

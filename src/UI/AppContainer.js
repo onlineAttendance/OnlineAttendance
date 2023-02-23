@@ -14,7 +14,13 @@ const AppContainer = ({ children }) => {
 
   const authContext = useContext(AuthContext);
 
+  const handleSignUp = () => {
+    setIsSignUp(true);
+  };
 
+  const handleCloseSignUp = () => {
+    setIsSignUp(false);
+  };
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -22,6 +28,7 @@ const AppContainer = ({ children }) => {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+    setIsSignUp(false);
   };
   const handleBottomNavClick = (value) => {
     if (authContext.isLogin === false) {
@@ -34,13 +41,18 @@ const AppContainer = ({ children }) => {
 
   return (
     <>
-      <AppModal open={isModalOpen} handleClose={handleModalClose}></AppModal>
+      <AppModal
+        open={isModalOpen}
+        SignUp = {isSignUp}
+        handleClose={handleModalClose}
+        handleSignUp={handleSignUp}
+      ></AppModal>
       <Header
         isAttendance={isAttendance}
         handleModalOpen={handleModalOpen}
       ></Header>
       <Container maxWidth="md">
-        <Stack sx={{mt:8, mb:8}}>
+        <Stack sx={{ mt: 8, mb: 8 }}>
           <Box>{isAttendance ? <Attendance /> : <TodaysWord />}</Box>
         </Stack>
       </Container>

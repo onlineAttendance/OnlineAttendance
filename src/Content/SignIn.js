@@ -142,7 +142,7 @@ const SignIn = (props) => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link onClick={props.handleSignUp} variant="body2">
                 {"회원가입"}
               </Link>
             </Grid>
