@@ -9,7 +9,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import {LockOpen, Send} from "@mui/icons-material";
+import { LockOpen, Send } from "@mui/icons-material";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/auth-context";
 import { ProfileContext } from "../context/profile-context";
@@ -21,8 +21,12 @@ const SignIn = (props) => {
   const profileContext = useContext(ProfileContext);
   const attendanceContext = useContext(AttendanceContext);
 
-  const { loginIsLoading, loginError, sendRequest: loginRequest } = useHttp();
-  const { attendanceIsLodaing, attendanceError, sendRequest: getAttendanceList } = useHttp();
+  const { loginIsLoading, loginErrorCode ,loginError, sendRequest: loginRequest } = useHttp();
+  const {
+    attendanceIsLodaing,
+    attendanceError,
+    sendRequest: getAttendanceList,
+  } = useHttp();
 
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -34,15 +38,15 @@ const SignIn = (props) => {
     setPassword(event.target.value);
   };
   const updateAttendanceList = (datas) => {
-    console.log("attendance",datas);
+    console.log("attendance", datas);
     attendanceContext.updateNotAttendanceList(datas.notAttendance);
     attendanceContext.updateAttendanceList(datas.attendance);
     profileContext.updateTeam(datas.team);
     console.log(datas.notAttendance);
-    };
+  };
 
   const handleInitAttendanceList = (token) => {
-    console.log("handleInitAttendanceList",token);
+    console.log("handleInitAttendanceList", token);
     getAttendanceList(
       {
         url: "/api/users/attendances",
@@ -56,14 +60,16 @@ const SignIn = (props) => {
   };
 
   const updateAuthContext = (data) => {
-    props.handleClose();
-    authContext.handleLogIn(data.token);
-    profileContext.updateName(name);
-    profileContext.updatePW(password);
-    
-    handleInitAttendanceList(data.token);
-
-    console.log(authContext.isLogin);
+    if (data.code !== undefined) {
+      console.log("Error code:", data.code);
+    } else {
+      props.handleClose();
+      authContext.handleLogIn(data.token);
+      profileContext.updateName(name);
+      profileContext.updatePW(password);
+      handleInitAttendanceList(data.token);
+      console.log(authContext.isLogin);
+    }
   };
 
   const handleSubmit = (event) => {
@@ -126,6 +132,7 @@ const SignIn = (props) => {
           <LoadingButton
             type="submit"
             fullWidth
+            color={loginErrorCode !== null ? "primary" : "error"}
             onClick={handleSubmit}
             sx={{ mt: 3, mb: 2 }}
             endIcon={<Send />}

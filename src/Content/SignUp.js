@@ -10,6 +10,7 @@ import {
   Autocomplete,
   Avatar,
   Select,
+  FormControl,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { LockOpen, Send } from "@mui/icons-material";
@@ -21,58 +22,57 @@ import useHttp from "../hooks/useHttp";
 
 const SignUp = (props) => {
   const teamList = [
+    { team: "복덕방" },
     { team: "복통" },
-    { team: "두통" },
-    { team: "머리아픔" },
-    { team: "배고픔" },
-    { team: "피곤함" },
-    { team: "기타" },
+    { team: "복권" },
+    { team: "또복" },
+    { team: "복덕복" },
   ];
 
   const yearList = [
-    { year: "1990" },
-    { year: "1991" },
-    { year: "1992" },
-    { year: "1993" },
-    { year: "1994" },
-    { year: "1995" },
-    { year: "1996" },
-    { year: "1997" },
-    { year: "1998" },
-    { year: "1999" },
-    { year: "2000" },
-    { year: "2001" },
-    { year: "2002" },
-    { year: "2003" },
-    { year: "2004" },
-    { year: "2005" },
-    { year: "2006" },
+    { year: "90" },
+    { year: "91" },
+    { year: "92" },
+    { year: "93" },
+    { year: "94" },
+    { year: "95" },
+    { year: "96" },
+    { year: "97" },
+    { year: "98" },
+    { year: "99" },
+    { year: "00" },
+    { year: "01" },
+    { year: "02" },
+    { year: "03" },
+    { year: "04" },
+    { year: "05" },
+    { year: "06" },
   ];
   const monthList = [
-    { month: "1" },
-    { month: "2" },
-    { month: "3" },
-    { month: "4" },
-    { month: "5" },
-    { month: "6" },
-    { month: "7" },
-    { month: "8" },
-    { month: "9" },
+    { month: "01" },
+    { month: "02" },
+    { month: "03" },
+    { month: "04" },
+    { month: "05" },
+    { month: "06" },
+    { month: "07" },
+    { month: "08" },
+    { month: "09" },
     { month: "10" },
     { month: "11" },
     { month: "12" },
   ];
 
   const dayList = [
-    { day: "1" },
-    { day: "2" },
-    { day: "3" },
-    { day: "4" },
-    { day: "5" },
-    { day: "6" },
-    { day: "7" },
-    { day: "8" },
-    { day: "9" },
+    { day: "01" },
+    { day: "02" },
+    { day: "03" },
+    { day: "04" },
+    { day: "05" },
+    { day: "06" },
+    { day: "07" },
+    { day: "08" },
+    { day: "09" },
     { day: "10" },
     { day: "11" },
     { day: "12" },
@@ -183,28 +183,26 @@ const SignUp = (props) => {
     console.log(password);
     console.log(rePassword);
     console.log(team);
+    let birth = year + "." + month + "." + day;
+    console.log(birth);
   };
 
   const updateAuthContext = (data) => {
     props.handleClose();
-    authContext.handleLogIn(data.token);
-    profileContext.updateName(name);
-    profileContext.updatePW(password);
-
-    handleInitAttendanceList(data.token);
-
-    console.log(authContext.isLogin);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     loginRequest(
       {
-        url: "/api/users/login",
+        url: "/api/users/signup",
         method: "POST",
         body: {
           name: name,
           password: password,
+          birth: year + "." + month + "." + day +".",
+          team: team,
+          faceImageFile: "default.png",
         },
       },
       updateAuthContext
@@ -281,27 +279,56 @@ const SignUp = (props) => {
             }}
           />
 
-          <Select label="년" value={yearList} onChange={handleYearChange}>
-            {yearList.map((item) => (
-              <MenuItem value={item.year}>{item.year}</MenuItem>
-            ))}
-          </Select>
-          <Select label="월" value={monthList} onChange={handleMonthChange}>
-            {monthList.map((item) => (
-              <MenuItem value={item.month}>{item.month}</MenuItem>
-            ))}
-          </Select>
-          <Select label="일" value={dayList} onChange={handleDayChange}>
-            {dayList.map((item) => (
-              <MenuItem value={item.day}>{item.day}</MenuItem>
-            ))}
-          </Select>
+          <Grid container>
+            <Grid item xs={4}>
+              <FormControl fullWidth>
+                <Select
+                  label="년"
+                  sx={{ flexGrow: 1 }}
+                  value={year}
+                  onChange={handleYearChange}
+                >
+                  {yearList.map((item) => (
+                    <MenuItem value={item.year}>{item.year}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={4}>
+              <FormControl fullWidth>
+                <Select
+                  label="월"
+                  sx={{ flexGrow: 1 }}
+                  value={month}
+                  onChange={handleMonthChange}
+                >
+                  {monthList.map((item) => (
+                    <MenuItem value={item.month}>{item.month}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={4}>
+              <FormControl fullWidth>
+                <Select
+                  label="일"
+                  sx={{ flexGrow: 1 }}
+                  value={day}
+                  onChange={handleDayChange}
+                >
+                  {dayList.map((item) => (
+                    <MenuItem value={item.day}>{item.day}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
 
           <LoadingButton
             type="submit"
             disabled={isRequired}
             fullWidth
-            onClick={TestData}
+            onClick={handleSubmit}
             sx={{ mt: 3, mb: 2 }}
             endIcon={<Send />}
             loading={loginIsLoading}

@@ -9,7 +9,7 @@ const TodaysWord = () => {
   return (
     <Paper >
       {postContext.posts.map((post) => (
-        <Card key={post.id} mt={2}>
+        <Card key={post.date} mt={2}>
           <CardContent>
           <Typography variant="body2" component="p">
               {post.date}
