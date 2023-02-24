@@ -19,8 +19,8 @@ const useHttp = () => {
       console.log("Req method : ", requestConfig.method);
       console.log("Req header : ", requestConfig.headers);
       console.log("Req body : ", requestConfig.body);
-
-      const response = await fetch(requestConfig.url, {
+      const baseURL = "https://attendance-hsk4991149.koyeb.app";
+      const response = await fetch(`${baseURL}${requestConfig.url}`, {
         method: requestConfig.method ? requestConfig.method : "GET",
         headers: requestConfig.headers
           ? requestConfig.headers
