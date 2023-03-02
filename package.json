@@ -1,6 +1,5 @@
 {
   "name": "newonlie-attendance",
-  "proxy": "http://attendance-hsk4991149.koyeb.app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

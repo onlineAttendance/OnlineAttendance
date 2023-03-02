@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/auth-context";
 import { AttendanceContext } from "../context/attendance-context";
 import { ProfileContext } from "../context/profile-context";
@@ -16,6 +16,16 @@ import { LoadingButton } from "@mui/lab";
 import { AccountCircle, Send } from "@mui/icons-material";
 
 const MyInfo = () => {
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleNewPasswordChange = (event) => {
+    setNewPassword(event.target.value);
+  };
   const authContext = useContext(AuthContext);
   const attendanceContext = useContext(AttendanceContext);
   const profileContext = useContext(ProfileContext);
@@ -51,6 +61,7 @@ const MyInfo = () => {
             name="currentPassword"
             placeholder="변경할 비밀번호 4자리를 입력하세요."
             autoComplete="password"
+            onChange={handlePasswordChange}
             autoFocus
           />
           <TextField
@@ -63,6 +74,7 @@ const MyInfo = () => {
             placeholder="변경한 비밀번호를 한번 더 입력하세요."
             type="password"
             id="newPassword"
+            onChange={handleNewPasswordChange}
           />
           <LoadingButton
             type="submit"

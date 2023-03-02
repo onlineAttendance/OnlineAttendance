@@ -19,7 +19,7 @@ const useHttp = () => {
       console.log("Req method : ", requestConfig.method);
       console.log("Req header : ", requestConfig.headers);
       console.log("Req body : ", requestConfig.body);
-      const baseURL = "https://attendance-hsk4991149.koyeb.app";
+      const baseURL = "https://sungam.site";
       const response = await fetch(`${baseURL}${requestConfig.url}`, {
         method: requestConfig.method ? requestConfig.method : "GET",
         headers: requestConfig.headers
@@ -33,7 +33,7 @@ const useHttp = () => {
       console.log("Data: ", data);
       await applyData(data);
 
-      if (response.status == 400 || 401 || 402 || 403 ) {
+      if (response.status == 400 || 401 || 402 || 403) {
         setError(data.message);
         setErrorCode(data.code);
         throw new Error("Request failed!");
