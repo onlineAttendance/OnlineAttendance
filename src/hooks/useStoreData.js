@@ -11,5 +11,4 @@ const useStoreData = (dataname,data) =>{
         const data = localStorage.getItem(dataname);
         return JSON.parse(data);
     }
-    
 }

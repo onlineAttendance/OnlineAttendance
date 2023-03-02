@@ -14,21 +14,65 @@ import {
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { AccountCircle, Send } from "@mui/icons-material";
+import useHttp from "../hooks/useHttp";
 
 const MyInfo = () => {
+
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [isSame, setIsSame] = useState(false);
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    passwordVerification();
   };
 
   const handleNewPasswordChange = (event) => {
     setNewPassword(event.target.value);
+    passwordVerification();
+
   };
   const authContext = useContext(AuthContext);
   const attendanceContext = useContext(AttendanceContext);
   const profileContext = useContext(ProfileContext);
+
+  const {
+    passwordIsLodaing,
+    passwordError,
+    sendRequest: fetchPassword,
+  } = useHttp();
+
+  const passwordVerification = () => {
+    if(password !== "" && newPassword !== ""){
+      setIsSame(true);
+    }
+    else{
+      setIsSame(false);
+    }
+  }
+  const checkPassword = (data) => {
+    console.log(data);
+  }
+
+  const passwordChangeSubmit = (event) => {
+    event.preventDefault();
+    console.log(authContext.token);
+    console.log(password);
+    fetchPassword(
+      {
+        url: "/api/users/account/password",
+        method:"PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authContext.token}`,
+        },
+        body: {
+          password: newPassword
+        },
+      },
+      checkPassword
+    );
+  };
 
   return (
     <Container maxWidth="xs">
@@ -77,6 +121,7 @@ const MyInfo = () => {
             onChange={handleNewPasswordChange}
           />
           <LoadingButton
+            disabled = {!isSame}
             type="submit"
             fullWidth
             sx={{ mt: 3, mb: 2 }}
@@ -84,6 +129,7 @@ const MyInfo = () => {
             loading={false}
             loadingPosition="end"
             variant="contained"
+            onClick={passwordChangeSubmit}
           >
             비밀번호 변경하기
           </LoadingButton>
