@@ -20,8 +20,8 @@ import { ProfileContext } from "../context/profile-context";
 
 function CircularProgressWithLabel(props) {
   return (
-    <Box sx={{ position: "relative", display: "inline-flex", width:1, justifyContent:"center", mt:2, mb:2}}>
-      <CircularProgress variant="determinate" {...props} size={80}/>
+    <Box sx={{ position: "relative", display: "inline-flex", width: 1, justifyContent: "center", mt: 2, mb: 2 }}>
+      <CircularProgress variant="determinate" {...props} size={80} />
       <Box
         sx={{
           top: 0,
@@ -34,7 +34,7 @@ function CircularProgressWithLabel(props) {
           justifyContent: "center",
         }}
       >
-        <Typography variant="caption" component="div" color="text.secondary" sx={{fontSize:20}}>
+        <Typography variant="caption" component="div" color="text.secondary" sx={{ fontSize: 20 }}>
           {`${Math.round(props.value)}%`}
         </Typography>
       </Box>
@@ -50,6 +50,7 @@ const Attendance = () => {
   const [attendanceCode, setAttendanceCode] = useState("");
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
+  const [isTyped, setIsTyped] = useState(false);
 
   const {
     attendanceIsLodaing,
@@ -62,7 +63,7 @@ const Attendance = () => {
       (attendanceContext.attendanceList.length /
         (attendanceContext.notAttendanceList.length +
           attendanceContext.attendanceList.length)) *
-        100
+      100
     );
     handleInitAttendanceList();
   }, [attendanceContext.attendanceList, attendanceContext.notAttendanceList]);
@@ -78,12 +79,23 @@ const Attendance = () => {
     console.log("미출석: ", attendanceContext.notAttendanceList.length);
     console.log(value);
   };
+  const handleIsTyped = () => {
+    console.log(attendanceCode)
+    attendanceCode != "" ? setIsTyped(true) : setIsTyped(false);
+  }
 
   const updateAttendanceList = (datas) => {
-    console.log("attendance", datas);
-    attendanceContext.updateNotAttendanceList(datas.notAttendance);
-    attendanceContext.updateAttendanceList(datas.attendance);
-    profileContext.updateTeam(datas.team);
+    if (datas.code !== undefined) {
+      console.log(datas.code);
+      setHelperText(datas.message);
+      console.log(datas.message);
+    }
+    else {
+      attendanceContext.updateNotAttendanceList(datas.notAttendance);
+      attendanceContext.updateAttendanceList(datas.attendance);
+      profileContext.updateTeam(datas.team);
+    }
+
     console.log("NotattendanceList : ", attendanceContext.notAttendance);
   };
 
@@ -104,6 +116,7 @@ const Attendance = () => {
 
   const handleAttendanceCode = (e) => {
     setAttendanceCode(e.target.value);
+    handleIsTyped();
     if (e.target.value.length > 4) {
       setError(true);
       setHelperText("출석코드는 4자리입니다.");
@@ -128,7 +141,9 @@ const Attendance = () => {
           <Button
             sx={{ height: 1 }}
             variant="contained"
+            disabled={!isTyped}
             onClick={handleAttendanceCodeSubmit}
+
           >
             출석하기
           </Button>
@@ -138,7 +153,7 @@ const Attendance = () => {
           <CircularProgressWithLabel value={value} />
         </Grid>
         <Grid item xs={12}>
-          <Grid container rowSpacing={1} sx={{backgroundColor:"#1976D2", borderRadius:"5px"}}>
+          <Grid container rowSpacing={1} sx={{ backgroundColor: "#1976D2", borderRadius: "5px" }}>
             <Grid
               item
               xs={12}
@@ -146,7 +161,7 @@ const Attendance = () => {
                 textAlign: "center",
               }}
             >
-              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1, p:1}}>
+              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1, p: 1 }}>
                 {profileContext.userTeam}
               </Paper>
             </Grid>
@@ -157,7 +172,7 @@ const Attendance = () => {
                 textAlign: "center",
               }}
             >
-              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1,p:1 }}>
+              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1, p: 1 }}>
                 미출석
               </Paper>
               <Paper sx={{ m: 1 }}>
@@ -181,7 +196,7 @@ const Attendance = () => {
                 boxSizing: "border-box",
               }}
             >
-              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1,p:1 }}>
+              <Paper variant="h6" sx={{ backgroundColor: "#FFF", m: 1, p: 1 }}>
                 출석자
               </Paper>
               <Paper sx={{ m: 1 }}>
