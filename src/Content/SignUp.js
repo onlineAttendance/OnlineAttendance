@@ -344,7 +344,7 @@ const SignUp = (props) => {
               </Link>
             </Grid>
             <Grid item>
-              <Link onClick={props.handleSignUp} variant="body2">
+              <Link onClick={props.handleCloseSignUp} variant="body2">
                 {"로그인"}
               </Link>
             </Grid>

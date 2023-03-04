@@ -16,11 +16,11 @@ import { LoadingButton } from "@mui/lab";
 import { AccountCircle, Send } from "@mui/icons-material";
 import useHttp from "../hooks/useHttp";
 
-const MyInfo = () => {
+const MyInfo = (props) => {
 
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [isSame, setIsSame] = useState(false);
+  const [isSame, setIsSame] = useState(true);
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -51,27 +51,34 @@ const MyInfo = () => {
     }
   }
   const checkPassword = (data) => {
-    console.log(data);
+    props.handleClose();
   }
 
   const passwordChangeSubmit = (event) => {
     event.preventDefault();
-    console.log(authContext.token);
-    console.log(password);
-    fetchPassword(
-      {
-        url: "/api/users/account/password",
-        method:"PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authContext.token}`,
+    if(password.length === 4 && newPassword.length === 4 && password === newPassword){
+      setIsSame(true);
+      props.handleClose();
+      fetchPassword(
+        {
+          url: "/api/users/account/password",
+          method:"PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authContext.token}`,
+          },
+          body: {
+            password: newPassword
+          },
         },
-        body: {
-          password: newPassword
-        },
-      },
-      checkPassword
-    );
+        checkPassword
+      );
+    }
+    else{
+      setIsSame(false);
+      console.log("비밀번호가 일치하지 않습니다.")
+    }
+    
   };
 
   return (
@@ -102,8 +109,10 @@ const MyInfo = () => {
             fullWidth
             id="currentPassword"
             label="비밀번호"
+            type="password"
             name="currentPassword"
             placeholder="변경할 비밀번호 4자리를 입력하세요."
+            pattern="[0-9]*" inputmode="numeric"
             autoComplete="password"
             onChange={handlePasswordChange}
             autoFocus
@@ -116,6 +125,7 @@ const MyInfo = () => {
             name="newPassword"
             label="비밀번호 재입력"
             placeholder="변경한 비밀번호를 한번 더 입력하세요."
+            pattern="[0-9]*" inputmode="numeric"
             type="password"
             id="newPassword"
             onChange={handleNewPasswordChange}
@@ -131,7 +141,7 @@ const MyInfo = () => {
             variant="contained"
             onClick={passwordChangeSubmit}
           >
-            비밀번호 변경하기
+            {isSame ? "비밀번호 변경하기" : "변경할 비밀번호가 일치하지 않습니다."}
           </LoadingButton>
         </form>
       </Box>
