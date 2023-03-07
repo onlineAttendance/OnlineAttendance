@@ -19,9 +19,9 @@ import useHttp from "../hooks/useHttp";
 const SignIn = (props) => {
   const authContext = useContext(AuthContext);
   const profileContext = useContext(ProfileContext);
-  const attendanceContext = useContext(AttendanceContext);
+  const attendanceContext = useContext(AttendanceContext);  
 
-  const { loginIsLoading, loginErrorCode ,loginError, sendRequest: loginRequest } = useHttp();
+  const { loginIsLoading ,loginError, sendRequest: loginRequest } = useHttp();
   const {
     attendanceIsLodaing,
     attendanceError,
@@ -30,6 +30,8 @@ const SignIn = (props) => {
 
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [helperText, setHelperText] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -62,8 +64,13 @@ const SignIn = (props) => {
   const updateAuthContext = (data) => {
     if (data.code !== undefined) {
       console.log("Error code:", data.code);
+      console.log("Error code:", loginError);
+      setHelperText(data.message);
+      setIsError(true);
     } else {
       props.handleClose();
+      setHelperText("");
+      setIsError(false);
       authContext.handleLogIn(data.token);
       profileContext.updateName(name);
       profileContext.updatePW(password);
@@ -132,7 +139,7 @@ const SignIn = (props) => {
           <LoadingButton
             type="submit"
             fullWidth
-            color={loginErrorCode !== null ? "primary" : "error"}
+            color={!isError ? "primary" : "error"}
             onClick={handleSubmit}
             sx={{ mt: 3, mb: 2 }}
             endIcon={<Send />}
@@ -140,7 +147,7 @@ const SignIn = (props) => {
             loadingPosition="end"
             variant="contained"
           >
-            로그인
+            {!isError ? "로그인" : helperText}
           </LoadingButton>
           <Grid container>
             <Grid item xs>

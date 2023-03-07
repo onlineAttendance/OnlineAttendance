@@ -46,6 +46,7 @@ const AppContainer = ({ children }) => {
         SignUp = {isSignUp}
         handleClose={handleModalClose}
         handleSignUp={handleSignUp}
+        handleCloseSignUp={handleCloseSignUp}
       ></AppModal>
       <Header
         isAttendance={isAttendance}

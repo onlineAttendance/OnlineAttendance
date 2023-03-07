@@ -100,18 +100,24 @@ const Attendance = () => {
   };
 
   const handleAttendanceCodeSubmit = () => {
-    postAttendanceRequest(
-      {
-        url: "/api/users/attendances",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authContext.token}`,
+    if(attendanceCode.length !== 4){
+      setError(true);
+    }else{
+      setError(false);
+      postAttendanceRequest(
+        {
+          url: "/api/users/attendances",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authContext.token}`,
+          },
+          body: { password: attendanceCode },
         },
-        body: { password: attendanceCode },
-      },
-      updateAttendanceList
-    );
+        updateAttendanceList
+      );
+    }
+    
   };
 
   const handleAttendanceCode = (e) => {
@@ -131,6 +137,7 @@ const Attendance = () => {
         <Grid item sx={{ flexGrow: 1 }}>
           <TextField
             label="출석코드"
+            pattern="[0-9]*" inputmode="numeric"
             error={error}
             helperText={helperText}
             fullWidth

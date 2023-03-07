@@ -3,7 +3,6 @@ import { useState, useCallback } from "react";
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [errorCode, setErrorCode] = useState(null);
 
   const sendRequest = useCallback(async (requestConfig, applyData) => {
     setIsLoading(true);
@@ -35,7 +34,6 @@ const useHttp = () => {
 
       if (response.status == 400 || 401 || 402 || 403) {
         setError(data.message);
-        setErrorCode(data.code);
         throw new Error("Request failed!");
       }
     } catch (err) {
@@ -46,7 +44,6 @@ const useHttp = () => {
 
   return {
     isLoading,
-    errorCode,
     error,
     sendRequest,
   };
